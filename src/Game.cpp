@@ -44,6 +44,9 @@ Game::Game(int width, int height, const char* title)
 
     // Use V-Sync
     glfwSwapInterval(1);
+
+    // Set clear color
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 }
 
 Game::~Game()
@@ -61,9 +64,6 @@ void Game::processInput()
 
 void Game::render()
 {
-    // Set clear color
-    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-
     // Clear color buffer
     glClear(GL_COLOR_BUFFER_BIT);
 }
