@@ -1,19 +1,22 @@
 #pragma once
 
 class GLFWwindow;
+class Paddle;
 
 class Game
 {
 public:
-    Game(int width, int height, const char* title);
+    Game(int framebufferWidth, int framebufferHeight, const char* title);
     ~Game();
 
     int run();
 
 private:
     GLFWwindow* window;
-    int width, height;
 
+    Paddle* paddle;
+
+    void init();
     void processInput();
     void render();
 };
