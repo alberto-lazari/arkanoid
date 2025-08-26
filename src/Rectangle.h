@@ -27,10 +27,19 @@ public:
     Rectangle(const Params& params);
     ~Rectangle();
 
-    void render(float aspectRatio);
+    constexpr float getPosWidth() { return width; }
+    constexpr float getPosHeight() { return height; }
+    constexpr float getPosX() { return posX; }
+    constexpr float getPosY() { return posY; }
 
-    void move(float dx) { posX += dx; }
-    void setPosition(float x) { posX = x; }
+    void render(float aspectRatio, float alpha);
+
+    void move(float dx)
+    {
+        lastX = posX;
+        posX += dx;
+    }
+    void setPosition(float x) { lastX = posX = x; }
 
 private:
     // Vertex Buffer Object (vertices used by the rectangle)
@@ -46,6 +55,8 @@ private:
     float height;
 
     float posX;
+    // Previous x position for interpolation
+    float lastX;
     float posY;
 
     Colors colors;

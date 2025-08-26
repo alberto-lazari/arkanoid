@@ -2,13 +2,22 @@
 
 #include "Rectangle.h"
 
-class Paddle : public Rectangle
+#include <memory>
+
+class Paddle
 {
 public:
-    Paddle();
+    Paddle(float speed = 2.5f, const Rectangle::Params& rectangleParams = DEFAULT_PARAMS);
+
+    void move(float dx);
+    void setPosition(float x);
+    void render(float aspectRatio, float alpha);
 
 private:
-    static constexpr Rectangle::Params rectangleParams = {
+    std::unique_ptr<Rectangle> rectangle;
+    float moveSpeed;
+
+    static constexpr Rectangle::Params DEFAULT_PARAMS = {
         .width = 0.4f,
         .height = 0.05f,
         .posY = -0.85f,

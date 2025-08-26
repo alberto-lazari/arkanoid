@@ -1,11 +1,16 @@
 #pragma once
 
+#include <memory>
+
 class GLFWwindow;
 class Paddle;
 
 class Game
 {
 public:
+    static constexpr float FIXED_STEP = 1.0 / 60.0;
+    static constexpr float MAX_FRAME_TIME = 0.25;
+
     Game(int framebufferWidth, int framebufferHeight, const char* title);
     ~Game();
 
@@ -14,9 +19,12 @@ public:
 private:
     GLFWwindow* window;
 
-    Paddle* paddle;
+    std::unique_ptr<Paddle> paddle;
+
+    bool isPressed(int key);
 
     void init();
     void processInput();
-    void render();
+    void render(float alpha);
+    void update(float dt);
 };

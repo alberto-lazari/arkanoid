@@ -6,6 +6,7 @@ Rectangle::Rectangle(const Params& params)
     : width(params.width)
     , height(params.height)
     , posX(params.posX)
+    , lastX(posX)
     , posY(params.posY)
     , colors(params.colors)
 {
@@ -57,7 +58,7 @@ Rectangle::~Rectangle()
     glDeleteProgram(shaderProgramHandle);
 }
 
-void Rectangle::render(float aspectRatio)
+void Rectangle::render(float aspectRatio, float alpha)
 {
     glBindVertexArray(vaoHandle);
 
@@ -66,7 +67,10 @@ void Rectangle::render(float aspectRatio)
     const GLuint offsetLoc = glGetUniformLocation(shaderProgramHandle, "uOffset");
     const GLuint aspectLoc = glGetUniformLocation(shaderProgramHandle, "uAspect");
     glUniform2f(scaleLoc, width, height);
-    glUniform2f(offsetLoc, posX, posY);
+    // Interpolate position
+    glUniform2f(offsetLoc, posX * alpha + lastX * (1 - alpha), posY);
+    // Reset lastX
+    lastX = posX;
     glUniform1f(aspectLoc, aspectRatio);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <algorithm>
 #include <cstdlib>
 #include <iostream>
 
@@ -51,10 +52,23 @@ int Game::run()
     init();
 
     // Window main loop
+    float previousTime = glfwGetTime();
+    float accumulator = 0.0;
     while (!glfwWindowShouldClose(window))
     {
+        const float currentTime = glfwGetTime();
+        // Cap deltatime to avoid freeze
+        const float dt = std::min(currentTime - previousTime, MAX_FRAME_TIME);
+        accumulator += dt;
+        previousTime = currentTime;
+
         processInput();
-        render();
+        while (accumulator > FIXED_STEP)
+        {
+            update(FIXED_STEP);
+            accumulator -= FIXED_STEP;
+        }
+        render(accumulator / FIXED_STEP);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -63,30 +77,35 @@ int Game::run()
     return EXIT_SUCCESS;
 }
 
+bool Game::isPressed(int key)
+{
+    return glfwGetKey(window, key) == GLFW_PRESS;
+}
+
 void Game::init()
 {
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow*, int width, int height) {
         glViewport(0, 0, width, height);
     });
 
-    // Use V-Sync
-    glfwSwapInterval(1);
+    // Do not use V-Sync (since it causes frame jitter that I couldn't fix as of now)
+    glfwSwapInterval(0);
 
     // Set clear color
     glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
 
-    paddle = new Paddle;
+    paddle = std::make_unique<Paddle>();
 }
 
 void Game::processInput()
 {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if (isPressed(GLFW_KEY_ESCAPE))
     {
         glfwSetWindowShouldClose(window, true);
     }
 }
 
-void Game::render()
+void Game::render(float alpha)
 {
     // Clear color buffer
     glClear(GL_COLOR_BUFFER_BIT);
@@ -94,5 +113,11 @@ void Game::render()
     int width;
     int height;
     glfwGetFramebufferSize(window, &width, &height);
-    paddle->render(static_cast<float>(width) / height);
+    paddle->render(static_cast<float>(width) / height, alpha);
+}
+
+void Game::update(float dt)
+{
+    if (isPressed(GLFW_KEY_LEFT)) paddle->move(-dt);
+    else if (isPressed(GLFW_KEY_RIGHT)) paddle->move(dt);
 }
