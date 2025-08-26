@@ -1,33 +1,22 @@
 #pragma once
 
-#include <glad/glad.h>
+#include "Rectangle.h"
 
-class Paddle
+class Paddle : public Rectangle
 {
 public:
-    Paddle(float x = 0.0f, float y = -0.9f);
-    ~Paddle();
-
-    void render(float aspectRatio);
-
-    void move(float dx) { posX += dx; }
-    void setPosition(float x) { posX = x; }
+    Paddle();
 
 private:
-    // Vertex Buffer Object (vertices used by the paddle)
-    GLuint vboHandle = 0;
-    // Element Buffer Object (triangles that create the paddle)
-    GLuint eboHandle = 0;
-    // Vertex Array Object (array of vertex buffers)
-    GLuint vaoHandle = 0;
-
-    GLuint shaderProgramHandle = 0;
-
-    float width = 0.4f;
-    float height = 0.05f;
-
-    float posX;
-    float posY;
-
-    void initBuffers();
+    static constexpr Rectangle::Params rectangleParams = {
+        .width = 0.4f,
+        .height = 0.05f,
+        .posY = -0.85f,
+        .colors = {
+            .tl = { 0.9f, 0.9f, 0.9f, 1.0f },
+            .tr = { 0.9f, 0.9f, 0.9f, 1.0f },
+            .bl = { 0.4f, 0.4f, 0.4f, 1.0f },
+            .br = { 0.4f, 0.4f, 0.4f, 1.0f },
+        },
+    };
 };
