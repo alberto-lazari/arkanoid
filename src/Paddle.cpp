@@ -16,6 +16,11 @@ void Paddle::setPosition(float x)
     rectangle->setPosition(x);
 }
 
+void Paddle::update(float dt)
+{
+    rectangle->update(dt);
+}
+
 void Paddle::render(float aspectRatio, float alpha)
 {
     rectangle->render(aspectRatio, alpha);

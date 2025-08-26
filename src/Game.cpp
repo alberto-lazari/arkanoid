@@ -120,4 +120,6 @@ void Game::update(float dt)
 {
     if (isPressed(GLFW_KEY_LEFT)) paddle->move(-dt);
     else if (isPressed(GLFW_KEY_RIGHT)) paddle->move(dt);
+
+    paddle->update(dt);
 }

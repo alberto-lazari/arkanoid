@@ -32,6 +32,7 @@ public:
     constexpr float getPosX() { return posX; }
     constexpr float getPosY() { return posY; }
 
+    void update(float dt);
     void render(float aspectRatio, float alpha);
 
     void move(float dx)

@@ -11,6 +11,7 @@ public:
 
     void move(float dx);
     void setPosition(float x);
+    void update(float dt);
     void render(float aspectRatio, float alpha);
 
 private:

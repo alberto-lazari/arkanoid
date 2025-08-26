@@ -58,6 +58,11 @@ Rectangle::~Rectangle()
     glDeleteProgram(shaderProgramHandle);
 }
 
+void Rectangle::update(float dt)
+{
+    lastX = posX;
+}
+
 void Rectangle::render(float aspectRatio, float alpha)
 {
     glBindVertexArray(vaoHandle);
@@ -69,8 +74,6 @@ void Rectangle::render(float aspectRatio, float alpha)
     glUniform2f(scaleLoc, width, height);
     // Interpolate position
     glUniform2f(offsetLoc, posX * alpha + lastX * (1 - alpha), posY);
-    // Reset lastX
-    lastX = posX;
     glUniform1f(aspectLoc, aspectRatio);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
