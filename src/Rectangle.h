@@ -22,6 +22,36 @@ public:
         float posY = 0.0f;
 
         Colors colors;
+
+        const char* vertexShader = R"glsl(
+            #version 330 core
+            layout(location = 0) in vec2 aPos;
+            layout(location = 1) in vec3 aColor;
+            out vec3 vColor;
+
+            uniform vec2 uScale;
+            uniform vec2 uOffset;
+            uniform float uAspect;
+
+            void main()
+            {
+                vec2 scaledPos = aPos * uScale;
+                scaledPos.x /= uAspect;
+                gl_Position = vec4(scaledPos + uOffset, 0.0, 1.0);
+
+                vColor = aColor;
+            }
+        )glsl";
+        const char* fragmentShader = R"glsl(
+            #version 330 core
+            in vec3 vColor;
+            out vec4 fragColor;
+
+            void main()
+            {
+                fragColor = vec4(vColor, 1.0);
+            }
+        )glsl";
     };
 
     Rectangle(const Params& params);
@@ -61,6 +91,9 @@ private:
     float posY;
 
     Colors colors;
+
+    const char* vertexShader;
+    const char* fragmentShader;
 
     void initBuffers();
 };

@@ -4,6 +4,7 @@
 
 class GLFWwindow;
 class Paddle;
+class Circle;
 
 class Game
 {
@@ -20,6 +21,7 @@ private:
     GLFWwindow* window;
 
     std::unique_ptr<Paddle> paddle;
+    std::unique_ptr<Circle> ball;
 
     bool isPressed(int key);
 

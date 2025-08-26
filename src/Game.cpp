@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "Paddle.h"
+#include "Circle.h"
 
 Game::Game(int width, int height, const char* title)
     : window(nullptr)
@@ -95,6 +96,7 @@ void Game::init()
     glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
 
     paddle = std::make_unique<Paddle>();
+    ball = std::make_unique<Circle>();
 }
 
 void Game::processInput()
@@ -113,7 +115,10 @@ void Game::render(float alpha)
     int width;
     int height;
     glfwGetFramebufferSize(window, &width, &height);
-    paddle->render(static_cast<float>(width) / height, alpha);
+    const float aspectRatio = static_cast<float>(width) / height;
+
+    paddle->render(aspectRatio, alpha);
+    ball->render(aspectRatio, alpha);
 }
 
 void Game::update(float dt)
@@ -122,4 +127,5 @@ void Game::update(float dt)
     else if (isPressed(GLFW_KEY_RIGHT)) paddle->move(dt);
 
     paddle->update(dt);
+    ball->update(dt);
 }

@@ -19,8 +19,8 @@ private:
     float moveSpeed;
 
     static constexpr Rectangle::Params DEFAULT_PARAMS = {
-        .width = 0.4f,
-        .height = 0.05f,
+        .width = 0.5f,
+        .height = 0.08f,
         .posY = -0.85f,
         .colors = {
             .tl = { 0.9f, 0.9f, 0.9f, 1.0f },

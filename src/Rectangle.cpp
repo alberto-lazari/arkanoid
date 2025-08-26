@@ -9,44 +9,15 @@ Rectangle::Rectangle(const Params& params)
     , lastX(posX)
     , posY(params.posY)
     , colors(params.colors)
+    , vertexShader(params.vertexShader)
+    , fragmentShader(params.fragmentShader)
 {
     initBuffers();
 
     // Minimal shaders for rendering a solid color
     shaderProgramHandle = compileProgram({
-        {
-            GL_VERTEX_SHADER, R"glsl(
-                #version 330 core
-                layout(location = 0) in vec2 aPos;
-                layout(location = 1) in vec3 aColor;
-                out vec3 vColor;
-
-                uniform vec2 uScale;
-                uniform vec2 uOffset;
-                uniform float uAspect;
-
-                void main()
-                {
-                    vec2 scaledPos = aPos * uScale;
-                    scaledPos.x /= uAspect;
-                    gl_Position = vec4(scaledPos + uOffset, 0.0, 1.0);
-
-                    vColor = aColor;
-                }
-            )glsl"
-        },
-        {
-            GL_FRAGMENT_SHADER, R"glsl(
-                #version 330 core
-                in vec3 vColor;
-                out vec4 fragColor;
-
-                void main()
-                {
-                    fragColor = vec4(vColor, 1.0);
-                }
-            )glsl"
-        },
+        { GL_VERTEX_SHADER, vertexShader },
+        { GL_FRAGMENT_SHADER, fragmentShader },
     });
 }
 
