@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Rectangle.h"
+#include "Quad.h"
 
 #include <memory>
 
-class Circle : public Rectangle
+class Circle : public Quad
 {
 public:
     Circle(float speed = 2.0f, const Params& params = DEFAULT_PARAMS);
@@ -12,7 +12,7 @@ public:
 private:
     float moveSpeed;
 
-    static constexpr Rectangle::Params DEFAULT_PARAMS = {
+    static constexpr Quad::Params DEFAULT_PARAMS = {
         .width = 0.08f,
         .height = 0.08f,
         .posY = 0.0f,

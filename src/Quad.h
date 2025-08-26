@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-class Rectangle
+class Quad
 {
 public:
     struct Colors
@@ -54,8 +54,8 @@ public:
         )glsl";
     };
 
-    Rectangle(const Params& params);
-    ~Rectangle();
+    Quad(const Params& params);
+    ~Quad();
 
     constexpr float getPosWidth() { return width; }
     constexpr float getPosHeight() { return height; }
@@ -73,9 +73,9 @@ public:
     void setPosition(float x) { lastX = posX = x; }
 
 private:
-    // Vertex Buffer Object (vertices used by the rectangle)
+    // Vertex Buffer Object (vertices used by the quad)
     GLuint vboHandle = 0;
-    // Element Buffer Object (triangles that create the rectangle)
+    // Element Buffer Object (triangles that create the quad)
     GLuint eboHandle = 0;
     // Vertex Array Object (array of vertex buffers)
     GLuint vaoHandle = 0;

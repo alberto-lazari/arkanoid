@@ -1,8 +1,8 @@
-#include "Rectangle.h"
+#include "Quad.h"
 
 #include "shader_utils.h"
 
-Rectangle::Rectangle(const Params& params)
+Quad::Quad(const Params& params)
     : width(params.width)
     , height(params.height)
     , posX(params.posX)
@@ -21,7 +21,7 @@ Rectangle::Rectangle(const Params& params)
     });
 }
 
-Rectangle::~Rectangle()
+Quad::~Quad()
 {
     glDeleteBuffers(1, &vboHandle);
     glDeleteBuffers(1, &eboHandle);
@@ -29,12 +29,12 @@ Rectangle::~Rectangle()
     glDeleteProgram(shaderProgramHandle);
 }
 
-void Rectangle::update(float dt)
+void Quad::update(float dt)
 {
     lastX = posX;
 }
 
-void Rectangle::render(float aspectRatio, float alpha)
+void Quad::render(float aspectRatio, float alpha)
 {
     glBindVertexArray(vaoHandle);
 
@@ -53,7 +53,7 @@ void Rectangle::render(float aspectRatio, float alpha)
     glBindVertexArray(0);
 }
 
-void Rectangle::initBuffers()
+void Quad::initBuffers()
 {
     glGenVertexArrays(1, &vaoHandle);
     glBindVertexArray(vaoHandle);

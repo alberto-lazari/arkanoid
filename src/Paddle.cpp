@@ -1,27 +1,27 @@
 #include "Paddle.h"
 
-Paddle::Paddle(float speed, const Rectangle::Params& rectangleParams)
-    : rectangle(std::make_unique<Rectangle>(rectangleParams))
+Paddle::Paddle(float speed, const Quad::Params& quadParams)
+    : quad(std::make_unique<Quad>(quadParams))
     , moveSpeed(speed)
 {
 }
 
 void Paddle::move(float dx)
 {
-    rectangle->move(dx * moveSpeed);
+    quad->move(dx * moveSpeed);
 }
 
 void Paddle::setPosition(float x)
 {
-    rectangle->setPosition(x);
+    quad->setPosition(x);
 }
 
 void Paddle::update(float dt)
 {
-    rectangle->update(dt);
+    quad->update(dt);
 }
 
 void Paddle::render(float aspectRatio, float alpha)
 {
-    rectangle->render(aspectRatio, alpha);
+    quad->render(aspectRatio, alpha);
 }

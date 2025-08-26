@@ -1,7 +1,7 @@
 #include "Circle.h"
 
-Circle::Circle(float speed, const Params& params)
-    : Rectangle(params)
+Circle::Circle(float speed, const Params& quadParams)
+    : Quad(quadParams)
     , moveSpeed(speed)
 {
 }

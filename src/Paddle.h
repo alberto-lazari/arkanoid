@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Rectangle.h"
+#include "Quad.h"
 
 #include <memory>
 
 class Paddle
 {
 public:
-    Paddle(float speed = 2.5f, const Rectangle::Params& rectangleParams = DEFAULT_PARAMS);
+    Paddle(float speed = 2.5f, const Quad::Params& quadParams = DEFAULT_PARAMS);
 
     void move(float dx);
     void setPosition(float x);
@@ -15,10 +15,10 @@ public:
     void render(float aspectRatio, float alpha);
 
 private:
-    std::unique_ptr<Rectangle> rectangle;
+    std::unique_ptr<Quad> quad;
     float moveSpeed;
 
-    static constexpr Rectangle::Params DEFAULT_PARAMS = {
+    static constexpr Quad::Params DEFAULT_PARAMS = {
         .width = 0.5f,
         .height = 0.08f,
         .posY = -0.85f,
