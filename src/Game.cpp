@@ -7,7 +7,7 @@
 #include <iostream>
 
 #include "Paddle.h"
-#include "Circle.h"
+#include "Ball.h"
 
 Game::Game(int width, int height, const char* title)
     : window(nullptr)
@@ -96,7 +96,7 @@ void Game::init()
     glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
 
     paddle = std::make_unique<Paddle>();
-    ball = std::make_unique<Circle>();
+    ball = std::make_unique<Ball>();
 }
 
 void Game::processInput()

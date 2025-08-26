@@ -57,20 +57,18 @@ public:
     Quad(const Params& params);
     ~Quad();
 
-    constexpr float getPosWidth() { return width; }
-    constexpr float getPosHeight() { return height; }
-    constexpr float getPosX() { return posX; }
-    constexpr float getPosY() { return posY; }
+    constexpr float getWidth()  { return width; }
+    constexpr float getHeight() { return height; }
+    constexpr float getPosX()   { return posX; }
+    constexpr float getPosY()   { return posY; }
+
+    void setPositionX(float x) { lastX = posX = x; }
+    void setPositionY(float y) { lastY = posY = y; }
 
     void update(float dt);
     void render(float aspectRatio, float alpha);
 
-    void move(float dx)
-    {
-        lastX = posX;
-        posX += dx;
-    }
-    void setPosition(float x) { lastX = posX = x; }
+    void move(float dx, float dy);
 
 private:
     // Vertex Buffer Object (vertices used by the quad)
@@ -86,9 +84,11 @@ private:
     float height;
 
     float posX;
-    // Previous x position for interpolation
-    float lastX;
     float posY;
+
+    // Previous position for interpolation
+    float lastX;
+    float lastY;
 
     Colors colors;
 

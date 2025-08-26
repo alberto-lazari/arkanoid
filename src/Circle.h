@@ -7,12 +7,7 @@
 class Circle : public Quad
 {
 public:
-    Circle(float speed = 2.0f, const Params& params = DEFAULT_PARAMS);
-
-private:
-    float moveSpeed;
-
-    static constexpr Quad::Params DEFAULT_PARAMS = {
+    static constexpr Quad::Params DEFAULT_QUAD_PARAMS = {
         .width = 0.08f,
         .height = 0.08f,
         .posY = 0.0f,
@@ -61,4 +56,6 @@ private:
             }
         )glsl",
     };
+
+    Circle(const Params& quadParams = DEFAULT_QUAD_PARAMS);
 };

@@ -8,12 +8,12 @@ Paddle::Paddle(float speed, const Quad::Params& quadParams)
 
 void Paddle::move(float dx)
 {
-    quad->move(dx * moveSpeed);
+    quad->move(dx * moveSpeed, 0.0f);
 }
 
 void Paddle::setPosition(float x)
 {
-    quad->setPosition(x);
+    quad->setPositionX(x);
 }
 
 void Paddle::update(float dt)

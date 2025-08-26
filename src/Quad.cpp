@@ -6,8 +6,9 @@ Quad::Quad(const Params& params)
     : width(params.width)
     , height(params.height)
     , posX(params.posX)
-    , lastX(posX)
     , posY(params.posY)
+    , lastX(posX)
+    , lastY(posY)
     , colors(params.colors)
     , vertexShader(params.vertexShader)
     , fragmentShader(params.fragmentShader)
@@ -31,7 +32,6 @@ Quad::~Quad()
 
 void Quad::update(float dt)
 {
-    lastX = posX;
 }
 
 void Quad::render(float aspectRatio, float alpha)
@@ -44,14 +44,29 @@ void Quad::render(float aspectRatio, float alpha)
     const GLuint aspectLoc = glGetUniformLocation(shaderProgramHandle, "uAspect");
     glUniform2f(scaleLoc, width, height);
     // Interpolate position
-    glUniform2f(offsetLoc, posX * alpha + lastX * (1 - alpha), posY);
+    const float smoothX = posX * alpha + lastX * (1 - alpha);
+    const float smoothY = posY * alpha + lastY * (1 - alpha);
+    glUniform2f(offsetLoc, smoothX, smoothY);
     glUniform1f(aspectLoc, aspectRatio);
+
+    // Reset last position, otherwise it trembles on no movement
+    lastX = posX;
+    lastY = posY;
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     glUseProgram(0);
     glBindVertexArray(0);
 }
+
+void Quad::move(float dx, float dy)
+{
+    lastX = posX;
+    lastY = posY;
+    posX += dx;
+    posY += dy;
+}
+
 
 void Quad::initBuffers()
 {
