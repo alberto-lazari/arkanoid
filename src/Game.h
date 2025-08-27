@@ -6,6 +6,7 @@ class GLFWwindow;
 class Quad;
 class Paddle;
 class Ball;
+class Brick;
 
 class Game
 {
@@ -27,6 +28,7 @@ private:
     std::unique_ptr<Quad> background;
     std::unique_ptr<Paddle> paddle;
     std::unique_ptr<Ball> ball;
+    std::unique_ptr<Brick> brick;
 
     bool isPressed(int key) const;
 

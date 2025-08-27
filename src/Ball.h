@@ -18,9 +18,16 @@ public:
 
     Ball(float speed = 3.0f, const Circle::Params& circleParams = DEFAULT_CIRCLE_PARAMS);
 
+    constexpr const Circle& getQuad() const { return circle; }
+
     void update(float dt);
     void render(float aspectRatio, float alpha);
-    void resolveCollisionWith(const Quad& other);
+
+    void resolveCollisionWith(const Quad& other, const std::array<float, 2>& distance);
+    void resolveCollisionWith(const Quad& other)
+    {
+        resolveCollisionWith(other, circle.distanceFrom(other));
+    }
 
 private:
     Circle circle;

@@ -7,6 +7,42 @@
 class Quad
 {
 public:
+    static constexpr const char* VERTEX_SHADER = R"glsl(
+        #version 330 core
+        layout(location = 0) in vec2 aPos;
+        layout(location = 1) in vec3 aColor;
+        out vec2 vPos;
+        out vec3 vColor;
+
+        uniform vec2 uScale;
+        uniform vec2 uOffset;
+        uniform float uAspect;
+        uniform vec2 uWorldSize;
+
+        void main()
+        {
+            vec2 worldPos = aPos * uScale + uOffset;
+            float worldScale = 2.0 / min(uWorldSize.x, uWorldSize.y);
+            vec2 clipPos = worldPos * worldScale;
+            clipPos.x /= uAspect;
+
+            gl_Position = vec4(clipPos, 0.0, 1.0);
+            vPos = aPos;
+            vColor = aColor;
+        }
+    )glsl";
+    static constexpr const char* FRAGMENT_SHADER = R"glsl(
+        #version 330 core
+        in vec2 vPos;
+        in vec3 vColor;
+        out vec4 fragColor;
+
+        void main()
+        {
+            fragColor = vec4(vColor, 1.0);
+        }
+    )glsl";
+
     struct Colors
     {
         float tl[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -25,41 +61,7 @@ public:
 
         Colors colors;
 
-        const char* vertexShader = R"glsl(
-            #version 330 core
-            layout(location = 0) in vec2 aPos;
-            layout(location = 1) in vec3 aColor;
-            out vec2 vPos;
-            out vec3 vColor;
-
-            uniform vec2 uScale;
-            uniform vec2 uOffset;
-            uniform float uAspect;
-            uniform vec2 uWorldSize;
-
-            void main()
-            {
-                vec2 worldPos = aPos * uScale + uOffset;
-                float worldScale = 2.0 / min(uWorldSize.x, uWorldSize.y);
-                vec2 clipPos = worldPos * worldScale;
-                clipPos.x /= uAspect;
-
-                gl_Position = vec4(clipPos, 0.0, 1.0);
-                vPos = aPos;
-                vColor = aColor;
-            }
-        )glsl";
-        const char* fragmentShader = R"glsl(
-            #version 330 core
-            in vec2 vPos;
-            in vec3 vColor;
-            out vec4 fragColor;
-
-            void main()
-            {
-                fragColor = vec4(vColor, 1.0);
-            }
-        )glsl";
+        GLuint shaderProgramHandle = 0;
     };
 
     Quad(const Params& params);
@@ -84,8 +86,6 @@ public:
      */
     std::array<float, 2> distanceFrom(const Quad& other) const;
 
-    void resolveCollisionWith(const Quad& other, const std::array<float, 2>& distance);
-
 private:
     // Vertex Buffer Object (vertices used by the quad)
     GLuint vboHandle = 0;
@@ -108,8 +108,6 @@ private:
 
     Colors colors;
 
-    const char* vertexShader;
-    const char* fragmentShader;
-
     void initBuffers();
+    static GLuint getShaderProgramHandle();
 };

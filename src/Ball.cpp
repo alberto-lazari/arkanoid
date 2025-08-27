@@ -42,17 +42,28 @@ void Ball::render(float aspectRatio, float alpha)
     circle.render(aspectRatio, alpha);
 }
 
-void Ball::resolveCollisionWith(const Quad& other)
+void Ball::resolveCollisionWith(const Quad& other, const std::array<float, 2>& distance)
 {
-    const auto& distance = circle.distanceFrom(other);
     const auto& [distX, distY] = distance;
 
     // Check if the quads are actually colliding
     if (distX > 0.0f || distY > 0.0f) return;
 
-    // Push ball outside of the quad
-    circle.resolveCollisionWith(other, distance);
-
-    // Update velocity to match the impact
-    velocity[distX > distY ? 0 : 1] *= -1.0f;
+    // Push ball outside of the quad and update velocity to match the impact
+    if (std::abs(distX) < std::abs(distY))
+    {
+        circle.move(
+            std::copysign(distX, circle.getPosX() - other.getPosX()),
+            0.0f
+        );
+        velocity[0] *= -1.0f;
+    }
+    else
+    {
+        circle.move(
+            0.0f,
+            std::copysign(distY, circle.getPosY() - other.getPosY())
+        );
+        velocity[1] *= -1.0f;
+    }
 }

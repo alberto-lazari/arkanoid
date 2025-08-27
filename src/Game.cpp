@@ -8,6 +8,7 @@
 
 #include "Paddle.h"
 #include "Ball.h"
+#include "Brick.h"
 
 Game::Game(const char* title)
     : window(nullptr)
@@ -107,6 +108,7 @@ void Game::init()
     });
     paddle = std::make_unique<Paddle>();
     ball = std::make_unique<Ball>();
+    brick = std::make_unique<Brick>(0, 0, Quad::Colors {});
 }
 
 void Game::processInput()
@@ -130,6 +132,7 @@ void Game::render(float alpha)
     background->render(aspectRatio, alpha);
     ball->render(aspectRatio, alpha);
     paddle->render(aspectRatio, alpha);
+    if (brick) brick->render(aspectRatio, alpha);
 }
 
 void Game::update(float dt)
@@ -141,4 +144,15 @@ void Game::update(float dt)
     ball->update(dt);
 
     ball->resolveCollisionWith(paddle->getQuad());
+
+    // Brick collision
+    if (!brick) return;
+    const Quad& brickQuad = brick->getQuad();
+    const auto& distance = ball->getQuad()
+        .distanceFrom(brickQuad);
+    if (distance[0] <= 0 && distance[1] <= 0)
+    {
+        ball->resolveCollisionWith(brickQuad, distance);
+        brick.reset();
+    }
 }

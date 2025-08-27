@@ -13,15 +13,11 @@ Quad::Quad(const Params& params)
     , lastX(posX)
     , lastY(posY)
     , colors(params.colors)
-    , vertexShader(params.vertexShader)
-    , fragmentShader(params.fragmentShader)
+    , shaderProgramHandle(params.shaderProgramHandle)
 {
     initBuffers();
 
-    shaderProgramHandle = compileProgram({
-        { GL_VERTEX_SHADER, vertexShader },
-        { GL_FRAGMENT_SHADER, fragmentShader },
-    });
+    if (!shaderProgramHandle) shaderProgramHandle = getShaderProgramHandle();
 }
 
 Quad::~Quad()
@@ -29,7 +25,10 @@ Quad::~Quad()
     glDeleteBuffers(1, &vboHandle);
     glDeleteBuffers(1, &eboHandle);
     glDeleteVertexArrays(1, &vaoHandle);
-    glDeleteProgram(shaderProgramHandle);
+
+    // The program is shared between quads, so just leave it there for now.
+    // TODO: delete it when the last quad alive is destroyed.
+    // glDeleteProgram(shaderProgramHandle);
 }
 
 void Quad::render(float aspectRatio, float alpha)
@@ -76,19 +75,6 @@ std::array<float, 2> Quad::distanceFrom(const Quad& other) const
     const float distanceY = std::abs(posY - other.posY) - (height + other.height) / 2.0;
 
     return { distanceX, distanceY };
-}
-
-void Quad::resolveCollisionWith(const Quad& other, const std::array<float, 2>& distance)
-{
-    const auto& [distX, distY] = distance;
-
-    // Check if the quads are actually colliding
-    if (distX > 0.0f || distY > 0.0f) return;
-
-    // Push self outside of the other quad
-    if (std::abs(distX) < std::abs(distY))
-        posX += std::copysign(distX, posX - other.posX);
-    else posY += std::copysign(distY, posY - other.posY);
 }
 
 
@@ -142,4 +128,18 @@ void Quad::initBuffers()
     // Unbind vbo and vao, to allow later reuse without conflicts
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+}
+
+GLuint Quad::getShaderProgramHandle()
+{
+    static GLuint handle = 0;
+    if (!handle)
+    {
+        handle = compileProgram({
+            { GL_VERTEX_SHADER, VERTEX_SHADER },
+            { GL_FRAGMENT_SHADER, FRAGMENT_SHADER },
+        });
+    }
+
+    return handle;
 }
