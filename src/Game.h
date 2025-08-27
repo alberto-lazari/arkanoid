@@ -3,6 +3,7 @@
 #include <memory>
 
 class GLFWwindow;
+class Quad;
 class Paddle;
 class Ball;
 
@@ -12,7 +13,10 @@ public:
     static constexpr float FIXED_STEP = 1.0 / 60.0;
     static constexpr float MAX_FRAME_TIME = 0.25;
 
-    Game(int framebufferWidth, int framebufferHeight, const char* title);
+    static constexpr float WIDTH = 4.0f;
+    static constexpr float HEIGHT = 3.0f;
+
+    Game(const char* title);
     ~Game();
 
     int run();
@@ -20,10 +24,11 @@ public:
 private:
     GLFWwindow* window;
 
+    std::unique_ptr<Quad> background;
     std::unique_ptr<Paddle> paddle;
     std::unique_ptr<Ball> ball;
 
-    bool isPressed(int key);
+    bool isPressed(int key) const;
 
     void init();
     void processInput();

@@ -1,6 +1,9 @@
 #include "Quad.h"
 
+#include "Game.h"
 #include "shader_utils.h"
+
+#include <algorithm>
 
 Quad::Quad(const Params& params)
     : width(params.width)
@@ -15,7 +18,6 @@ Quad::Quad(const Params& params)
 {
     initBuffers();
 
-    // Minimal shaders for rendering a solid color
     shaderProgramHandle = compileProgram({
         { GL_VERTEX_SHADER, vertexShader },
         { GL_FRAGMENT_SHADER, fragmentShader },
@@ -37,17 +39,22 @@ void Quad::update(float dt)
 void Quad::render(float aspectRatio, float alpha)
 {
     glBindVertexArray(vaoHandle);
-
     glUseProgram(shaderProgramHandle);
+
     const GLuint scaleLoc = glGetUniformLocation(shaderProgramHandle, "uScale");
-    const GLuint offsetLoc = glGetUniformLocation(shaderProgramHandle, "uOffset");
-    const GLuint aspectLoc = glGetUniformLocation(shaderProgramHandle, "uAspect");
     glUniform2f(scaleLoc, width, height);
+
     // Interpolate position
+    const GLuint offsetLoc = glGetUniformLocation(shaderProgramHandle, "uOffset");
     const float smoothX = posX * alpha + lastX * (1 - alpha);
     const float smoothY = posY * alpha + lastY * (1 - alpha);
     glUniform2f(offsetLoc, smoothX, smoothY);
+
+    const GLuint aspectLoc = glGetUniformLocation(shaderProgramHandle, "uAspect");
     glUniform1f(aspectLoc, aspectRatio);
+
+    const GLuint worldSizeLoc = glGetUniformLocation(shaderProgramHandle, "uWorldSize");
+    glUniform2f(worldSizeLoc, Game::WIDTH, Game::HEIGHT);
 
     // Reset last position, otherwise it trembles on no movement
     lastX = posX;
@@ -65,6 +72,26 @@ void Quad::move(float dx, float dy)
     lastY = posY;
     posX += dx;
     posY += dy;
+}
+
+std::array<float, 2> Quad::distanceFrom(const Quad& other) const
+{
+    const float distanceX = std::abs(posX - other.posX) - (width + other.width) / 2.0;
+    const float distanceY = std::abs(posY - other.posY) - (height + other.height) / 2.0;
+
+    return { distanceX, distanceY };
+}
+
+void Quad::resolveCollisionWith(const Quad& other, const std::array<float, 2>& distance)
+{
+    const auto& [distX, distY] = distance;
+
+    // Check if the quads are actually colliding
+    if (distX > 0.0f || distY > 0.0f) return;
+
+    // Push self outside of the other quad
+    posX += posX > other.posX ? distX : -distX;
+    posY += posY > other.posY ? distY : -distY;
 }
 
 

@@ -9,7 +9,7 @@
 #include "Paddle.h"
 #include "Ball.h"
 
-Game::Game(int width, int height, const char* title)
+Game::Game(const char* title)
     : window(nullptr)
 {
     if (!glfwInit())
@@ -24,7 +24,7 @@ Game::Game(int width, int height, const char* title)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Create Window and OpenGL context
-    window = glfwCreateWindow(width, height, title, nullptr, nullptr);
+    window = glfwCreateWindow(WIDTH, HEIGHT, title, nullptr, nullptr);
     if (!window)
     {
         std::cerr << "Failed to create window\n";
@@ -78,7 +78,7 @@ int Game::run()
     return EXIT_SUCCESS;
 }
 
-bool Game::isPressed(int key)
+bool Game::isPressed(int key) const
 {
     return glfwGetKey(window, key) == GLFW_PRESS;
 }
@@ -93,8 +93,18 @@ void Game::init()
     glfwSwapInterval(0);
 
     // Set clear color
-    glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
+    background = std::make_unique<Quad>(Quad::Params {
+        .width = WIDTH,
+        .height = HEIGHT,
+        .colors = {
+            .tl = { 0.5f, 0.6f, 1.0f, 1.0f },
+            .tr = { 0.5f, 0.6f, 1.0f, 1.0f },
+            .bl = { 0.3f, 0.4f, 1.0f, 1.0f },
+            .br = { 0.3f, 0.4f, 1.0f, 1.0f },
+        },
+    });
     paddle = std::make_unique<Paddle>();
     ball = std::make_unique<Ball>();
 }
@@ -117,8 +127,9 @@ void Game::render(float alpha)
     glfwGetFramebufferSize(window, &width, &height);
     const float aspectRatio = static_cast<float>(width) / height;
 
-    paddle->render(aspectRatio, alpha);
+    background->render(aspectRatio, alpha);
     ball->render(aspectRatio, alpha);
+    paddle->render(aspectRatio, alpha);
 }
 
 void Game::update(float dt)
@@ -128,4 +139,6 @@ void Game::update(float dt)
 
     paddle->update(dt);
     ball->update(dt);
+
+    ball->resolveCollisionWith(paddle->getQuad());
 }

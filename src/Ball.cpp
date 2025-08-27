@@ -1,7 +1,11 @@
 #include "Ball.h"
 
-Ball::Ball(float speed, const Quad::Params& quadParams)
-    : circle(std::make_unique<Circle>(quadParams))
+#include "Game.h"
+
+#include <cmath>
+
+Ball::Ball(float speed, const Circle::Params& circleParams)
+    : circle(std::make_unique<Circle>(circleParams))
     , moveSpeed(speed)
     , velocity { speed, -speed }
 {
@@ -9,22 +13,46 @@ Ball::Ball(float speed, const Quad::Params& quadParams)
 
 void Ball::update(float dt)
 {
-    // Check if hitting walls
-    const float posX = circle->getPosX();
-    const float halfWidth = circle->getWidth() / 2.0;
-    if (posX + halfWidth >= 1.0 || posX - halfWidth <= -1.0)
-        velocity[0] *= -1;
-
-    const float posY = circle->getPosY();
-    const float halfHeight = circle->getHeight() / 2.0;
-    if (posY + halfHeight >= 1.0 || posY - halfHeight <= -1.0)
-        velocity[1] *= -1;
-
     circle->move(dt * velocity[0], dt * velocity[1]);
+
+    const float ray = circle->getRay();
+    auto resolveWallCollision = [&](float& pos, float& velocity, float halfWorldSize)
+    {
+        if (std::abs(pos) + ray >= halfWorldSize)
+        {
+            pos = std::copysign(halfWorldSize - ray, pos);
+            velocity *= -1.0f;
+        }
+    };
+
+    // Check if hitting walls
+    float posX = circle->getPosX();
+    resolveWallCollision(posX, velocity[0], Game::WIDTH / 2.0f);
+    circle->setPositionX(posX);
+
+    float posY = circle->getPosY();
+    resolveWallCollision(posY, velocity[1], Game::HEIGHT / 2.0f);
+    circle->setPositionY(posY);
+
     circle->update(dt);
 }
 
 void Ball::render(float aspectRatio, float alpha)
 {
     circle->render(aspectRatio, alpha);
+}
+
+void Ball::resolveCollisionWith(const Quad& other)
+{
+    const auto& distance = circle->distanceFrom(other);
+    const auto& [distX, distY] = distance;
+
+    // Check if the quads are actually colliding
+    if (distX > 0.0f || distY > 0.0f) return;
+
+    // Push ball outside of the quad
+    circle->resolveCollisionWith(other, distance);
+
+    // Update velocity to match the impact
+    velocity[distX < distY ? 0 : 1] *= -1.0f;
 }
