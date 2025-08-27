@@ -54,5 +54,5 @@ void Ball::resolveCollisionWith(const Quad& other)
     circle->resolveCollisionWith(other, distance);
 
     // Update velocity to match the impact
-    velocity[distX < distY ? 0 : 1] *= -1.0f;
+    velocity[distX > distY ? 0 : 1] *= -1.0f;
 }

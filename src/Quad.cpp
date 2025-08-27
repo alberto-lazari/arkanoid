@@ -90,8 +90,9 @@ void Quad::resolveCollisionWith(const Quad& other, const std::array<float, 2>& d
     if (distX > 0.0f || distY > 0.0f) return;
 
     // Push self outside of the other quad
-    posX += posX > other.posX ? distX : -distX;
-    posY += posY > other.posY ? distY : -distY;
+    if (std::abs(distX) < std::abs(distY))
+        posX += std::copysign(distX, posX - other.posX);
+    else posY += std::copysign(distY, posY - other.posY);
 }
 
 
