@@ -25,22 +25,25 @@ void BrickMap::render(float aspectRatio, float alpha)
             brickPtr->render(aspectRatio, alpha);
 }
 
-auto BrickMap::findBricksNearby(const Quad& quad) -> std::vector<Columns::iterator>
+auto BrickMap::findBricksNearby(const Quad& quad)
+    -> std::vector<std::pair<Rows::iterator, Columns::iterator>>
 {
+    if (rows.empty()) return {};
+
     const auto findNearestRows = 
         [this](float y) -> std::pair<Rows::iterator, Rows::iterator>
         {
-            // Binary search for the first row whose Y is >= y
+            // Binary search for the first row whose Y is <= y
             const auto it = std::lower_bound(rows.begin(), rows.end(), y,
                 [](const auto& row, float value)
                 {
-                    return row[0]->getQuad().getPosY() < value;
+                    return row[0]->getQuad().getPosY() > value;
                 });
 
-            // y is below the bottom row
+            // y is above the top row
             if (it == rows.begin()) return { it, it };
 
-            // y is above the top row
+            // y is below the bottom row
             if (it == rows.end()) return { it - 1, it - 1 };
 
             // y is between two rows
@@ -67,18 +70,25 @@ auto BrickMap::findBricksNearby(const Quad& quad) -> std::vector<Columns::iterat
             return { it - 1, it };
         };
 
-    std::vector<Columns::iterator> bricks;
+    std::vector<std::pair<Rows::iterator, Columns::iterator>> bricks;
     const auto& [bottomRow, topRow] = findNearestRows(quad.getPosY());
 
     const auto& [bottomLeft, bottomRight] = findNearestColumns(quad.getPosX(), *bottomRow);
-    bricks.push_back(bottomLeft);
-    if (bottomLeft != bottomRight) bricks.push_back(bottomRight);
+    bricks.push_back({ bottomRow, bottomRight });
+    if (bottomLeft != bottomRight) bricks.push_back({ bottomRow, bottomLeft });
 
     if (bottomRow == topRow) return bricks;
 
     const auto& [topLeft, topRight] = findNearestColumns(quad.getPosX(), *topRow);
-    bricks.push_back(topLeft);
-    if (topLeft != topRight) bricks.push_back(topRight);
+    bricks.push_back({ topRow, topRight });
+    if (topLeft != topRight) bricks.push_back({ topRow, topLeft });
 
     return bricks;
+}
+
+void BrickMap::destroyBrick(const Rows::iterator& rowIt, const Columns::iterator& brickIt)
+{
+    Columns& row = *rowIt;
+    row.erase(brickIt);
+    if (row.empty()) rows.erase(rowIt);
 }

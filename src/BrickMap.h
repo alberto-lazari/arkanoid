@@ -18,7 +18,8 @@ public:
     void update(float dt);
     void render(float aspectRatio, float alpha);
 
-    std::vector<Columns::iterator> findBricksNearby(const Quad& quad);
+    std::vector<std::pair<Rows::iterator, Columns::iterator>> findBricksNearby(const Quad& quad);
+    void destroyBrick(const Rows::iterator& rowIt, const Columns::iterator& brickIt);
 
 private:
     Rows rows;

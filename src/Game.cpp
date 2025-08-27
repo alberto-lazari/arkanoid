@@ -147,14 +147,14 @@ void Game::update(float dt)
 
     // Brick collisions
     const Quad& ballQuad = ball->getQuad();
-    for (const auto& brickPtr : brickMap->findBricksNearby(ballQuad))
+    for (const auto& [rowIt, brickIt] : brickMap->findBricksNearby(ballQuad))
     {
-        const Quad& brickQuad = (*brickPtr)->getQuad();
+        const Quad& brickQuad = (*brickIt)->getQuad();
         const auto& distance = ballQuad.distanceFrom(brickQuad);
         if (distance[0] <= 0 && distance[1] <= 0)
         {
             ball->resolveCollisionWith(brickQuad, distance);
-            // TODO: destroy the brick
+            brickMap->destroyBrick(rowIt, brickIt);
         }
     }
 }
