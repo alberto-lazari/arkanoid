@@ -32,10 +32,6 @@ Quad::~Quad()
     glDeleteProgram(shaderProgramHandle);
 }
 
-void Quad::update(float dt)
-{
-}
-
 void Quad::render(float aspectRatio, float alpha)
 {
     glBindVertexArray(vaoHandle);

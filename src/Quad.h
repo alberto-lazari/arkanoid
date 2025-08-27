@@ -63,7 +63,7 @@ public:
     };
 
     Quad(const Params& params);
-    ~Quad();
+    virtual ~Quad();
 
     constexpr float getWidth()  const { return width; }
     constexpr float getHeight() const { return height; }
@@ -73,9 +73,9 @@ public:
     void setPositionX(float x) { lastX = posX = x; }
     void setPositionY(float y) { lastY = posY = y; }
 
-    void update(float dt);
-    void render(float aspectRatio, float alpha);
+    virtual void update(float dt) {}
 
+    void render(float aspectRatio, float alpha);
     void move(float dx, float dy);
 
     /*
