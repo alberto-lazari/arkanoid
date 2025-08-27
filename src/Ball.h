@@ -2,8 +2,6 @@
 
 #include "Circle.h"
 
-#include <memory>
-
 class Ball
 {
 public:
@@ -25,7 +23,7 @@ public:
     void resolveCollisionWith(const Quad& other);
 
 private:
-    std::unique_ptr<Circle> circle;
+    Circle circle;
     float moveSpeed;
     float velocity[2] = { 0.0f, 0.0f };
 };
