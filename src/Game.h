@@ -2,11 +2,11 @@
 
 #include <memory>
 
-class GLFWwindow;
+struct GLFWwindow;
 class Quad;
 class Paddle;
 class Ball;
-class Brick;
+class BrickMap;
 
 class Game
 {
@@ -28,7 +28,7 @@ private:
     std::unique_ptr<Quad> background;
     std::unique_ptr<Paddle> paddle;
     std::unique_ptr<Ball> ball;
-    std::unique_ptr<Brick> brick;
+    std::unique_ptr<BrickMap> brickMap;
 
     bool isPressed(int key) const;
 

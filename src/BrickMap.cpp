@@ -1,0 +1,84 @@
+#include "BrickMap.h"
+
+#include "Brick.h"
+#include "Quad.h"
+
+#include <utility>
+
+BrickMap::BrickMap()
+{
+    rows.push_back({});
+    rows[0].push_back(std::make_unique<Brick>(0, 0, Quad::Colors {}));
+}
+
+void BrickMap::update(float dt)
+{
+    for (const auto& row : rows)
+        for (const auto& brickPtr : row)
+            brickPtr->update(dt);
+}
+
+void BrickMap::render(float aspectRatio, float alpha)
+{
+    for (const auto& row : rows)
+        for (const auto& brickPtr : row)
+            brickPtr->render(aspectRatio, alpha);
+}
+
+auto BrickMap::findBricksNearby(const Quad& quad) -> std::vector<Columns::iterator>
+{
+    const auto findNearestRows = 
+        [this](float y) -> std::pair<Rows::iterator, Rows::iterator>
+        {
+            // Binary search for the first row whose Y is >= y
+            const auto it = std::lower_bound(rows.begin(), rows.end(), y,
+                [](const auto& row, float value)
+                {
+                    return row[0]->getQuad().getPosY() < value;
+                });
+
+            // y is below the bottom row
+            if (it == rows.begin()) return { it, it };
+
+            // y is above the top row
+            if (it == rows.end()) return { it - 1, it - 1 };
+
+            // y is between two rows
+            return { it - 1, it };
+        };
+
+    const auto findNearestColumns =
+        [](float x, Columns& row) -> std::pair<Columns::iterator, Columns::iterator>
+        {
+            // Binary search for the first column in row whose X is >= x
+            const auto it = std::lower_bound(row.begin(), row.end(), x,
+                [](const auto& brickPtr, float value)
+                {
+                    return brickPtr->getQuad().getPosX() < value;
+                });
+
+            // x is before the first column
+            if (it == row.begin()) return { it, it };
+
+            // x is after the last column
+            if (it == row.end()) return { it - 1, it - 1 };
+
+            // x is between two columns
+            return { it - 1, it };
+        };
+
+    std::vector<Columns::iterator> bricks;
+    const auto& [bottomRow, topRow] = findNearestRows(quad.getPosY());
+
+    const auto& [bottomLeft, bottomRight] = findNearestColumns(quad.getPosX(), *bottomRow);
+    bricks.push_back(bottomLeft);
+    if (bottomLeft != bottomRight) bricks.push_back(bottomRight);
+
+    if (bottomRow == topRow) return bricks;
+
+    const auto& [topLeft, topRight] = findNearestColumns(quad.getPosX(), *topRow);
+    bricks.push_back(topLeft);
+    if (topLeft != topRight) bricks.push_back(topRight);
+
+    return bricks;
+}
