@@ -75,7 +75,7 @@ public:
     void setPositionX(float x) { lastX = posX = x; }
     void setPositionY(float y) { lastY = posY = y; }
 
-    virtual void update(float dt) {}
+    virtual void update(float /* dt */) {}
 
     void render(float aspectRatio, float alpha);
     void move(float dx, float dy);

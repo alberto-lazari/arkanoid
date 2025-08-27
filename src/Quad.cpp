@@ -6,14 +6,14 @@
 #include <algorithm>
 
 Quad::Quad(const Params& params)
-    : width(params.width)
+    : shaderProgramHandle(params.shaderProgramHandle)
+    , width(params.width)
     , height(params.height)
     , posX(params.posX)
     , posY(params.posY)
     , lastX(posX)
     , lastY(posY)
     , colors(params.colors)
-    , shaderProgramHandle(params.shaderProgramHandle)
 {
     initBuffers();
 

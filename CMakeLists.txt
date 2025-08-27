@@ -16,3 +16,10 @@ add_executable(Arkanoid ${SRC_FILES})
 
 target_include_directories(Arkanoid PRIVATE include external/glad/include)
 target_link_libraries(Arkanoid PRIVATE glfw glad)
+
+# Add warnings
+if (MSVC)
+    target_compile_options(Arkanoid PRIVATE /W4 /permissive-)
+else()
+    target_compile_options(Arkanoid PRIVATE -Wall -Wextra -Wpedantic)
+endif()
