@@ -23,10 +23,10 @@ so there's really no point in beating the game at all :)
 
 ## Build
 
-I provide pre-built binaries on [itch.io](https://alberto-lazari.itch.io/arkanoid)
-for macOS and Windows,
-but of course you can compile the game yourself.
+I provide pre-built binaries on [itch.io](https://alberto-lazari.itch.io/arkanoid) for macOS and Windows,
+as well as a WebGL version playable directly from the browser!
 
+Of course you can compile the game yourself, too. \
 The project uses CMake as its main cross-platform build system.
 You can easily use the `cmake` command for building the executable if you feel comfortable with it,
 or you can use other methods that wrap its functionalities.
@@ -57,7 +57,7 @@ but you should be able to simply open it as a directory and VS should automatica
 ## Technical Notes
 
 Upon starting the development of this project,
-I thought I could simply write some very direct and low-level code and get away with it. \
+I thought I could simply write some very direct and low-level code and get away with it.
 Little did I know that I would have started writing pieces of a simple game engine.
 
 The current state of the codebase is quite messy and is lacking a proper logical design.
