@@ -8,8 +8,8 @@ class Level;
 class Game
 {
 public:
-    static constexpr float FIXED_STEP = 1.0 / 60.0;
-    static constexpr float MAX_FRAME_TIME = 0.25;
+    static constexpr double FIXED_STEP = 1.0 / 60.0;
+    static constexpr double MAX_FRAME_TIME = 0.25;
 
     static constexpr float WIDTH = 4.0f;
     static constexpr float HEIGHT = 3.0f;
@@ -23,7 +23,7 @@ public:
 private:
     GLFWwindow* window;
 
-    float lastTime = 0.0f;
+    double lastTime = 0.0;
 
     std::unique_ptr<Level> level;
 

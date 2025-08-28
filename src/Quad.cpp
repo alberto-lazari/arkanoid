@@ -116,8 +116,8 @@ void Quad::move(float dx, float dy)
 
 std::array<float, 2> Quad::distanceFrom(const Quad& other) const
 {
-    const float distanceX = std::abs(posX - other.posX) - (width + other.width) / 2.0;
-    const float distanceY = std::abs(posY - other.posY) - (height + other.height) / 2.0;
+    const float distanceX = std::abs(posX - other.posX) - (width + other.width) / 2.0f;
+    const float distanceY = std::abs(posY - other.posY) - (height + other.height) / 2.0f;
 
     return { distanceX, distanceY };
 }
