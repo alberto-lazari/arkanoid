@@ -6,8 +6,8 @@ class Ball
 {
 public:
     static constexpr Circle::Params DEFAULT_CIRCLE_PARAMS = {
-        .posY = 0.0f,
         .posX = -1.5f,
+        .posY = 0.0f,
         .colors = {
             .tl = { 1.0f, 1.0f, 1.0f, 1.0f },
             .tr = { 0.9f, 0.9f, 0.9f, 1.0f },

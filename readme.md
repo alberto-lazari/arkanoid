@@ -23,7 +23,8 @@ so there's really no point in beating the game at all :)
 
 ## Build
 
-I (will) provide pre-built binaries on itch.io for macOS and Windows,
+I provide pre-built binaries on [itch.io](https://alberto-lazari.itch.io/arkanoid)
+for macOS and Windows,
 but of course you can compile the game yourself.
 
 The project uses CMake as its main cross-platform build system.

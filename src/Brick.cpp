@@ -2,10 +2,10 @@
 
 Brick::Brick(float posX, float posY, const Quad::Colors& colors)
     : quad({
-        .posX = posX,
-        .posY = posY,
         .width = WIDTH,
         .height = HEIGHT,
+        .posX = posX,
+        .posY = posY,
         .colors = colors,
     })
 {

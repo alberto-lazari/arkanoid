@@ -1,7 +1,9 @@
 BUILD_DIR := build
+WEB_BUILD_DIR := build-web
 
 EXE_NAME := Arkanoid
 EXE := $(BUILD_DIR)/$(EXE_NAME)
+WEB_EXE := $(WEB_BUILD_DIR)/$(EXE_NAME).html
 
 # Default target.
 # Build project and produce executable
@@ -13,12 +15,22 @@ $(EXE): $(BUILD_DIR)
 run: $(EXE)
 	@"./$(EXE)"
 
+# WebGL build with Emscripten
+webgl: $(WEB_EXE)
+
+$(WEB_EXE): $(WEB_BUILD_DIR)
+	@emcmake cmake -S . -B "$(WEB_BUILD_DIR)" -DCMAKE_BUILD_TYPE=Release
+	@cmake --build "$(WEB_BUILD_DIR)" --target $(EXE_NAME)
+
+web-run: webgl
+	@emrun --no_browser --port 8080 "$(WEB_BUILD_DIR)/$(EXE_NAME).html"
+
 # Create necessary directories
-$(BUILD_DIR):
+$(BUILD_DIR) $(WEB_BUILD_DIR):
 	@mkdir -p "$@"
 
 # Clean rule
 clean:
-	@rm -rf "$(BUILD_DIR)"
+	@rm -rf "$(BUILD_DIR)" "$(WEB_BUILD_DIR)"
 
-.PHONY: $(EXE) run clean
+.PHONY: exe $(EXE) run webgl web-run clean
