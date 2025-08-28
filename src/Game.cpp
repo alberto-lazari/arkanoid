@@ -99,7 +99,7 @@ void Game::init()
 
 void Game::processInput()
 {
-    if (isPressed(GLFW_KEY_ESCAPE))
+    if (isPressed(GLFW_KEY_ESCAPE) || isPressed(GLFW_KEY_Q))
     {
         glfwSetWindowShouldClose(window, true);
     }
