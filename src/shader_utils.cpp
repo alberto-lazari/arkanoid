@@ -1,11 +1,20 @@
 #include "shader_utils.h"
 
 #include <iostream>
+#include <string>
 
 GLuint compileShader(const Shader& shader)
 {
     const GLuint handle = glCreateShader(shader.type);
-    glShaderSource(handle, 1, &shader.source, nullptr);
+
+#ifdef __EMSCRIPTEN__
+    const char* version = "300 es";
+#else
+    const char* version = "330 core";
+#endif // __EMSCRIPTEN__
+
+    const char* source[] = { "#version ", version, "\n", shader.source };
+    glShaderSource(handle, sizeof(source) / sizeof(const char*), source, nullptr);
     glCompileShader(handle);
 
     int success;

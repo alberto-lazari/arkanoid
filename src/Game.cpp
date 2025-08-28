@@ -77,6 +77,16 @@ int Game::run()
     return EXIT_SUCCESS;
 }
 
+
+void Game::webMainLoop()
+{
+    processInput();
+    update(FIXED_STEP);
+    render(1.0f);
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+}
+
 bool Game::isPressed(int key) const
 {
     return glfwGetKey(window, key) == GLFW_PRESS;

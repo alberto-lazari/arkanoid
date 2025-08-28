@@ -18,6 +18,7 @@ public:
     ~Game();
 
     int run();
+    void webMainLoop();
 
 private:
     GLFWwindow* window;

@@ -8,7 +8,8 @@ class Circle : public Quad
 {
 public:
     static constexpr const char* FRAGMENT_SHADER = R"glsl(
-        #version 330 core
+        precision mediump float;
+
         in vec2 vPos;
         in vec3 vColor;
         out vec4 fragColor;

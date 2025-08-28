@@ -33,4 +33,4 @@ $(BUILD_DIR) $(WEB_BUILD_DIR):
 clean:
 	@rm -rf "$(BUILD_DIR)" "$(WEB_BUILD_DIR)"
 
-.PHONY: exe $(EXE) run webgl web-run clean
+.PHONY: exe $(EXE) $(WEB_EXE) run webgl web-run clean
