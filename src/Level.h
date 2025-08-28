@@ -11,6 +11,7 @@ class Level
 {
 public:
     Level(std::vector<Brick>&& bricks);
+    virtual ~Level() = default;
 
     void render(float aspectRatio, float alpha);
     void update(float dt);
@@ -22,4 +23,6 @@ private:
     Paddle paddle;
     Ball ball;
     BrickMap brickMap;
+
+    virtual std::vector<Brick> makeBrickMap() const = 0;
 };
