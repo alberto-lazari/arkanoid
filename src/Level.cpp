@@ -41,6 +41,8 @@ void Level::update(float dt)
         if (distance[0] <= 0 && distance[1] <= 0)
         {
             ball.resolveCollisionWith(brickQuad, distance);
+            // It's safe to destroy here, because 'BrickMap::findBricksNearby' guarantees
+            // that bricks are returned in reverse order.
             brickMap.destroyBrick(rowIt, brickIt);
         }
     }

@@ -101,8 +101,9 @@ auto BrickMap::findBricksNearby(const Quad& quad)
         };
 
     std::vector<std::pair<Rows::iterator, Columns::iterator>> bricks;
-    const auto& [bottomRow, topRow] = findNearestRows(quad.getPosY());
+    const auto& [topRow, bottomRow] = findNearestRows(quad.getPosY());
 
+    // Return bricks right -> left, bottom -> top to avoid iterator invalidation on destroy
     const auto& [bottomLeft, bottomRight] = findNearestColumns(quad.getPosX(), *bottomRow);
     bricks.push_back({ bottomRow, bottomRight });
     if (bottomLeft != bottomRight) bricks.push_back({ bottomRow, bottomLeft });

@@ -5,8 +5,8 @@
 class Brick
 {
 public:
-    static constexpr float WIDTH = 0.8f;
-    static constexpr float HEIGHT = 0.2f;
+    static constexpr float WIDTH = 0.5f;
+    static constexpr float HEIGHT = 0.15f;
 
     Brick(float posX, float posY, const Quad::Colors& colors);
 
