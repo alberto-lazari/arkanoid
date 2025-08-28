@@ -23,7 +23,7 @@ Game::Game(const char* title)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Create Window and OpenGL context
-    window = glfwCreateWindow(1280, 720, title, nullptr, nullptr);
+    window = glfwCreateWindow(1024, 768, title, nullptr, nullptr);
     if (!window)
     {
         std::cerr << "Failed to create window\n";

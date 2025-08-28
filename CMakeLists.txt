@@ -15,7 +15,6 @@ target_include_directories(glad PUBLIC external/glad/include)
 
 # GLFW
 if (EMSCRIPTEN)
-    set(CMAKE_EXECUTABLE_SUFFIX ".html")
     target_link_options(Arkanoid PRIVATE
         "-sUSE_GLFW=3"
         "-sFULL_ES3=1"

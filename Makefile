@@ -3,7 +3,8 @@ WEB_BUILD_DIR := build-web
 
 EXE_NAME := Arkanoid
 EXE := $(BUILD_DIR)/$(EXE_NAME)
-WEB_EXE := $(WEB_BUILD_DIR)/$(EXE_NAME).html
+WEB_EXE := $(WEB_BUILD_DIR)/$(EXE_NAME).js
+WEB_HTML := web/$(EXE_NAME).html
 
 # Default target.
 # Build project and produce executable
@@ -21,9 +22,10 @@ webgl: $(WEB_EXE)
 $(WEB_EXE): $(WEB_BUILD_DIR)
 	@emcmake cmake -S . -B "$(WEB_BUILD_DIR)" -DCMAKE_BUILD_TYPE=Release
 	@cmake --build "$(WEB_BUILD_DIR)" --target $(EXE_NAME)
+	@cp "$(WEB_HTML)" "$(WEB_BUILD_DIR)/index.html"
 
 web-run: webgl
-	@emrun --no_browser --port 8080 "$(WEB_BUILD_DIR)/$(EXE_NAME).html"
+	@emrun --port 8080 "$(WEB_BUILD_DIR)"
 
 # Create necessary directories
 $(BUILD_DIR) $(WEB_BUILD_DIR):
