@@ -6,7 +6,6 @@
 
 Ball::Ball(float speed, const Circle::Params& circleParams)
     : circle { circleParams }
-    , moveSpeed(speed)
     , velocity { speed, -speed }
 {
 }

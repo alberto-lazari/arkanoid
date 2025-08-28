@@ -10,9 +10,9 @@ public:
         .posX = -1.5f,
         .colors = {
             .tl = { 1.0f, 1.0f, 1.0f, 1.0f },
-            .tr = { 0.7f, 0.7f, 0.7f, 1.0f },
-            .bl = { 0.5f, 0.6f, 0.6f, 1.0f },
-            .br = { 0.3f, 0.3f, 0.3f, 1.0f },
+            .tr = { 0.9f, 0.9f, 0.9f, 1.0f },
+            .bl = { 0.8f, 0.8f, 0.8f, 1.0f },
+            .br = { 0.4f, 0.4f, 0.4f, 1.0f },
         },
     };
 
@@ -31,6 +31,5 @@ public:
 
 private:
     Circle circle;
-    float moveSpeed;
     float velocity[2] = { 0.0f, 0.0f };
 };

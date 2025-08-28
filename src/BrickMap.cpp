@@ -3,12 +3,30 @@
 #include "Brick.h"
 #include "Quad.h"
 
+#include <algorithm>
 #include <utility>
 
-BrickMap::BrickMap()
+BrickMap::BrickMap(Columns&& bricks)
 {
-    rows.push_back({});
-    rows[0].push_back(std::make_unique<Brick>(0, 0, Quad::Colors {}));
+    // std::sort(bricks);
+
+    if (bricks.empty()) return;
+
+    float rowY = bricks[0]->getQuad().getPosY();
+    rows.emplace_back();
+    for (auto& brickPtr : bricks)
+    {
+        const float brickY = brickPtr->getQuad().getPosY();
+
+        if (brickY != rowY)
+        {
+            // Create a new row
+            rows.emplace_back();
+            rowY = brickY;
+        }
+
+        rows.back().push_back(std::move(brickPtr));
+    }
 }
 
 void BrickMap::update(float dt)

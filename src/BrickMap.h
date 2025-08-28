@@ -13,7 +13,7 @@ public:
     using Columns = std::vector<std::unique_ptr<Brick>>;
     using Rows = std::vector<Columns>;
 
-    BrickMap();
+    BrickMap(Columns&& bricks);
 
     void update(float dt);
     void render(float aspectRatio, float alpha);

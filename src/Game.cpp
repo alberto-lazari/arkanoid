@@ -100,15 +100,17 @@ void Game::init()
         .width = WIDTH,
         .height = HEIGHT,
         .colors = {
-            .tl = { 0.5f, 0.6f, 1.0f, 1.0f },
-            .tr = { 0.5f, 0.6f, 1.0f, 1.0f },
-            .bl = { 0.3f, 0.4f, 1.0f, 1.0f },
-            .br = { 0.3f, 0.4f, 1.0f, 1.0f },
+            .tl = { 0.1f, 0.1f, 0.4f, 1.0f },
+            .tr = { 0.1f, 0.1f, 0.4f, 1.0f },
+            .bl = { 0.0f, 0.0f, 0.1f, 1.0f },
+            .br = { 0.0f, 0.0f, 0.1f, 1.0f },
         },
     });
     paddle = std::make_unique<Paddle>();
     ball = std::make_unique<Ball>();
-    brickMap = std::make_unique<BrickMap>();
+    BrickMap::Columns bricks;
+    bricks.emplace_back(std::make_unique<Brick>(0, 0, Quad::Colors {}));
+    brickMap = std::make_unique<BrickMap>(std::move(bricks));
 }
 
 void Game::processInput()
