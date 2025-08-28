@@ -31,6 +31,12 @@ The project uses CMake as its main cross-platform build system.
 You can easily use the `cmake` command for building the executable if you feel comfortable with it,
 or you can use other methods that wrap its functionalities.
 
+You will need to clone the repo first.
+Remember that GLFW is included as a submodule, so clone this with
+```bash
+git clone --recurse-submodules https://github.com/alberto-lazari/arkanoid
+```
+
 ### POSIX
 
 I provide a `Makefile` for POSIX environments
