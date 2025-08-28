@@ -99,10 +99,12 @@ void Game::init()
 
 void Game::processInput()
 {
+    // ESC/Q to quit
     if (isPressed(GLFW_KEY_ESCAPE) || isPressed(GLFW_KEY_Q))
-    {
         glfwSetWindowShouldClose(window, true);
-    }
+
+    // Space to launch ball and start game
+    if (isPressed(GLFW_KEY_SPACE)) level->start();
 }
 
 void Game::render(float alpha)
@@ -124,4 +126,11 @@ void Game::update(float dt)
     else if (isPressed(GLFW_KEY_RIGHT)) level->movePaddle(dt);
 
     level->update(dt);
+
+    if (level->gameOver())
+    {
+        level.reset();
+        level = std::make_unique<DemoLevel>();
+        level->update(dt);
+    }
 }

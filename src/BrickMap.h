@@ -29,6 +29,8 @@ public:
 
     void destroyBrick(const Rows::iterator& rowIt, const Columns::iterator& brickIt);
 
+    constexpr bool allDestroyed() const { return rows.empty(); }
+
 private:
     Rows rows;
 };

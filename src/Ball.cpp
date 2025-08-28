@@ -10,6 +10,24 @@ Ball::Ball(float speed, const Circle::Params& circleParams)
 {
 }
 
+float Ball::getSpeed() const
+{
+    // Return average speed
+    return (std::abs(velocity[0]) + std::abs(velocity[1])) / 2.0f;
+}
+
+void Ball::setPosition(float x, float y)
+{
+    circle.setPositionX(x);
+    circle.setPositionY(y);
+}
+
+void Ball::setSpeed(float speed)
+{
+    velocity[0] = std::copysign(speed, velocity[0]);
+    velocity[1] = std::copysign(speed, velocity[1]);
+}
+
 void Ball::update(float dt)
 {
     circle.move(dt * velocity[0], dt * velocity[1]);

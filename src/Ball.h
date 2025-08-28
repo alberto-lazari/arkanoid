@@ -19,6 +19,10 @@ public:
     Ball(float speed = 3.0f, const Circle::Params& circleParams = DEFAULT_CIRCLE_PARAMS);
 
     constexpr const Circle& getQuad() const { return circle; }
+    float getSpeed() const;
+
+    void setPosition(float x, float y);
+    void setSpeed(float speed);
 
     void update(float dt);
     void render(float aspectRatio, float alpha);

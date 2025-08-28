@@ -1,7 +1,7 @@
 #include "DemoLevel.h"
 
 DemoLevel::DemoLevel()
-    : Level(makeBrickMap())
+    : Level(makeBrickMap(), 2)
 {
 }
 
