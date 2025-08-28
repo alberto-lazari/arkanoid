@@ -67,6 +67,12 @@ public:
     Quad(const Params& params);
     virtual ~Quad();
 
+    Quad(Quad&& other) noexcept;
+    Quad& operator=(Quad&& other) noexcept;
+
+    Quad(const Quad&) = delete;
+    Quad& operator=(const Quad&) = delete;
+
     constexpr float getWidth()  const { return width; }
     constexpr float getHeight() const { return height; }
     constexpr float getPosX()   const { return posX; }

@@ -31,6 +31,51 @@ Quad::~Quad()
     // glDeleteProgram(shaderProgramHandle);
 }
 
+Quad::Quad(Quad&& other) noexcept
+    : vboHandle(other.vboHandle)
+    , eboHandle(other.eboHandle)
+    , vaoHandle(other.vaoHandle)
+    , shaderProgramHandle(other.shaderProgramHandle)
+    , width(other.width)
+    , height(other.height)
+    , posX(other.posX)
+    , posY(other.posY)
+    , lastX(other.lastX)
+    , lastY(other.lastY)
+    , colors(other.colors)
+{
+    other.vboHandle = 0;
+    other.eboHandle = 0;
+    other.vaoHandle = 0;
+    other.shaderProgramHandle = 0;
+}
+
+Quad& Quad::operator=(Quad&& other) noexcept
+{
+    if (this != &other)
+    {
+        vboHandle = other.vboHandle;
+        eboHandle = other.eboHandle;
+        vaoHandle = other.vaoHandle;
+        shaderProgramHandle = other.shaderProgramHandle;
+
+        width = other.width;
+        height = other.height;
+        posX = other.posX;
+        posY = other.posY;
+        lastX = other.lastX;
+        lastY = other.lastY;
+        colors = other.colors;
+
+        other.vaoHandle = 0;
+        other.vboHandle = 0;
+        other.eboHandle = 0;
+        other.shaderProgramHandle = 0;
+    }
+    return *this;
+}
+
+
 void Quad::render(float aspectRatio, float alpha)
 {
     glBindVertexArray(vaoHandle);

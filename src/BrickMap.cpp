@@ -26,7 +26,7 @@ BrickMap::BrickMap(std::vector<Brick>&& bricks)
 
     float rowY = bricks[0].getQuad().getPosY();
     rows.emplace_back();
-    for (const auto& brick : bricks)
+    for (auto& brick : bricks)
     {
         const float brickY = brick.getQuad().getPosY();
 
@@ -37,7 +37,7 @@ BrickMap::BrickMap(std::vector<Brick>&& bricks)
             rowY = brickY;
         }
 
-        rows.back().push_back(std::make_unique<Brick>(brick));
+        rows.back().push_back(std::make_unique<Brick>(std::move(brick)));
     }
 }
 

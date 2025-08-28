@@ -95,6 +95,7 @@ void Game::init()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     std::vector<Brick> bricks;
+    bricks.push_back({ 0, 0, {} });
     level = std::make_unique<Level>(std::move(bricks));
 }
 
