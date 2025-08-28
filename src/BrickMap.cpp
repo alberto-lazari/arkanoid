@@ -6,17 +6,29 @@
 #include <algorithm>
 #include <utility>
 
-BrickMap::BrickMap(Columns&& bricks)
+BrickMap::BrickMap(std::vector<Brick>&& bricks)
 {
-    // std::sort(bricks);
-
     if (bricks.empty()) return;
 
-    float rowY = bricks[0]->getQuad().getPosY();
+    // Sort top -> bottom, then left -> right
+    std::sort(bricks.begin(), bricks.end(),
+        [](const Brick& a, const Brick& b)
+        {
+            const float ay = a.getQuad().getPosY();
+            const float by = b.getQuad().getPosY();
+
+            // Same row -> left to right
+            if (ay == by) return a.getQuad().getPosX() < b.getQuad().getPosX();
+
+            // Higher Y first (top row first)
+            return ay > by;
+        });
+
+    float rowY = bricks[0].getQuad().getPosY();
     rows.emplace_back();
-    for (auto& brickPtr : bricks)
+    for (const auto& brick : bricks)
     {
-        const float brickY = brickPtr->getQuad().getPosY();
+        const float brickY = brick.getQuad().getPosY();
 
         if (brickY != rowY)
         {
@@ -25,7 +37,7 @@ BrickMap::BrickMap(Columns&& bricks)
             rowY = brickY;
         }
 
-        rows.back().push_back(std::move(brickPtr));
+        rows.back().push_back(std::make_unique<Brick>(brick));
     }
 }
 

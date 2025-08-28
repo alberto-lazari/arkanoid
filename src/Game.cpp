@@ -6,9 +6,7 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "Paddle.h"
-#include "Ball.h"
-#include "BrickMap.h"
+#include "Level.h"
 
 Game::Game(const char* title)
     : window(nullptr)
@@ -96,21 +94,8 @@ void Game::init()
     // Set clear color
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-    background = std::make_unique<Quad>(Quad::Params {
-        .width = WIDTH,
-        .height = HEIGHT,
-        .colors = {
-            .tl = { 0.1f, 0.1f, 0.4f, 1.0f },
-            .tr = { 0.1f, 0.1f, 0.4f, 1.0f },
-            .bl = { 0.0f, 0.0f, 0.1f, 1.0f },
-            .br = { 0.0f, 0.0f, 0.1f, 1.0f },
-        },
-    });
-    paddle = std::make_unique<Paddle>();
-    ball = std::make_unique<Ball>();
-    BrickMap::Columns bricks;
-    bricks.emplace_back(std::make_unique<Brick>(0, 0, Quad::Colors {}));
-    brickMap = std::make_unique<BrickMap>(std::move(bricks));
+    std::vector<Brick> bricks;
+    level = std::make_unique<Level>(std::move(bricks));
 }
 
 void Game::processInput()
@@ -131,32 +116,13 @@ void Game::render(float alpha)
     glfwGetFramebufferSize(window, &width, &height);
     const float aspectRatio = static_cast<float>(width) / height;
 
-    background->render(aspectRatio, alpha);
-    ball->render(aspectRatio, alpha);
-    paddle->render(aspectRatio, alpha);
-    brickMap->render(aspectRatio, alpha);
+    level->render(aspectRatio, alpha);
 }
 
 void Game::update(float dt)
 {
-    if (isPressed(GLFW_KEY_LEFT)) paddle->move(-dt);
-    else if (isPressed(GLFW_KEY_RIGHT)) paddle->move(dt);
+    if (isPressed(GLFW_KEY_LEFT)) level->movePaddle(-dt);
+    else if (isPressed(GLFW_KEY_RIGHT)) level->movePaddle(dt);
 
-    paddle->update(dt);
-    ball->update(dt);
-
-    ball->resolveCollisionWith(paddle->getQuad());
-
-    // Brick collisions
-    const Quad& ballQuad = ball->getQuad();
-    for (const auto& [rowIt, brickIt] : brickMap->findBricksNearby(ballQuad))
-    {
-        const Quad& brickQuad = (*brickIt)->getQuad();
-        const auto& distance = ballQuad.distanceFrom(brickQuad);
-        if (distance[0] <= 0 && distance[1] <= 0)
-        {
-            ball->resolveCollisionWith(brickQuad, distance);
-            brickMap->destroyBrick(rowIt, brickIt);
-        }
-    }
+    level->update(dt);
 }

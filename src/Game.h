@@ -3,10 +3,7 @@
 #include <memory>
 
 struct GLFWwindow;
-class Quad;
-class Paddle;
-class Ball;
-class BrickMap;
+class Level;
 
 class Game
 {
@@ -25,10 +22,7 @@ public:
 private:
     GLFWwindow* window;
 
-    std::unique_ptr<Quad> background;
-    std::unique_ptr<Paddle> paddle;
-    std::unique_ptr<Ball> ball;
-    std::unique_ptr<BrickMap> brickMap;
+    std::unique_ptr<Level> level;
 
     bool isPressed(int key) const;
 
