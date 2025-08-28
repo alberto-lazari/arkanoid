@@ -52,15 +52,15 @@ int Game::run()
     init();
 
     // Window main loop
-    float previousTime = glfwGetTime();
+    lastTime = glfwGetTime();
     float accumulator = 0.0;
     while (!glfwWindowShouldClose(window))
     {
         const float currentTime = glfwGetTime();
         // Cap deltatime to avoid freeze
-        const float dt = std::min(currentTime - previousTime, MAX_FRAME_TIME);
+        const float dt = std::min(currentTime - lastTime, MAX_FRAME_TIME);
         accumulator += dt;
-        previousTime = currentTime;
+        lastTime = currentTime;
 
         processInput();
         while (accumulator > FIXED_STEP)
@@ -80,9 +80,15 @@ int Game::run()
 
 void Game::webMainLoop()
 {
+    const float currentTime = glfwGetTime();
+    // Cap deltatime to avoid freeze
+    const float dt = std::min(currentTime - lastTime, MAX_FRAME_TIME);
+    lastTime = currentTime;
+
     processInput();
-    update(FIXED_STEP);
+    update(dt);
     render(1.0f);
+
     glfwSwapBuffers(window);
     glfwPollEvents();
 }

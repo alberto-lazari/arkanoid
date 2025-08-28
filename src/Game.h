@@ -23,6 +23,8 @@ public:
 private:
     GLFWwindow* window;
 
+    float lastTime = 0.0f;
+
     std::unique_ptr<Level> level;
 
     bool isPressed(int key) const;
